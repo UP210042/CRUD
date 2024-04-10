@@ -18,3 +18,16 @@ export async function createTask(formData) {
   const json = await res.json();
   return json;
 }
+
+export async function updateTask(formData) {
+  try {
+    const res = await fetch(`/api/updateTask.php`, {
+      method: "POST",
+      body: formData
+    });
+    const json = await res.json();
+    return json;
+  } catch (error) {
+    return { error: "Hubo un error al intentar actualizar la tarea" };
+  }
+}

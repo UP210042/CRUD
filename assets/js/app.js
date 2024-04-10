@@ -1,8 +1,8 @@
-import { getAllUsers, getTasksByUserId, createTask } from "./petitions.js";
+import { getAllUsers, getTasksByUserId, createTask, updateTask } from "./petitions.js";
 
 const listUsers = document.getElementById('users');
 const taskTable = document.getElementById('tasks');
-const taskForm = document.getElementById('form-task'); // Agregar la referencia al formulario
+const taskForm = document.getElementById('form-task');
 
 document.addEventListener('DOMContentLoaded', async () => {
   const allUsers = await getAllUsers();
@@ -28,10 +28,10 @@ listUsers.addEventListener('change', async () => {
         <td>${task.title}</td>
         <td>${task.description}</td> <!-- Mostrar la descripción en esta celda -->
         <td>
-          <button class="btn btn-info btn-sm updateBtn" id="updateBtn${task.id}">
+          <button class="btn btn-secondary btn-sm btn-actualizar">
             <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
           </button>
-          <button class="btn btn-danger btn-sm deleteBtn" id="deleteBtn${task.id}">
+          <button class="btn btn-danger btn-sm btn-borrar">
             <span>Borrar</span> <i class="nf nf-cod-trash"></i>
           </button>
         </td>
@@ -41,23 +41,10 @@ listUsers.addEventListener('change', async () => {
 });
 
 taskForm.addEventListener('submit', async (event) => {
-  event.preventDefault(); 
+  event.preventDefault();
 
   const formData = new FormData(taskForm); 
   const response = await createTask(formData);
 
   console.log(response);
-});
-
-document.getElementById('form-task').addEventListener('submit', async (event) => {
-  event.preventDefault(); // Evita el envío predeterminado del formulario
-  
-  const formData = new FormData(event.target); // Obtén los datos del formulario
-  
-  try {
-    const response = await createTask(formData); // Llama a la función createTask con los datos del formulario
-    console.log(response); // Maneja la respuesta si es necesario
-  } catch (error) {
-    console.error(error); // Maneja el error si ocurre
-  }
 });

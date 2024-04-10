@@ -5,7 +5,7 @@ if(isset($_GET['id'])) {
     $idUser = $_GET['id'];
 
     try {
-        $sql = "SELECT t.id, t.title, t.completed, t.idUser, u.firstname AS firstname
+        $sql = "SELECT t.id, t.title, t.description, t.idUser, u.firstname AS firstname
                 FROM task t
                 INNER JOIN user u ON u.id = t.idUser
                 WHERE t.idUser = ?";
@@ -17,7 +17,7 @@ if(isset($_GET['id'])) {
             $tasks[] = [
                 'id' => $row['id'],
                 'title' => $row['title'],
-                'completed' => $row['completed'] == 1, // Convertir a booleano
+                'description' => $row['description'],
                 'idUser' => $row['idUser'],
                 'firstname' => $row['firstname']
             ];

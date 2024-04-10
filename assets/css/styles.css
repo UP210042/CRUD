@@ -1,2 +1,12 @@
 /* @import "https://www.nerdfonts.com/assets/css/webfont.css"; */
 @import url(bootstrap.min.css);
+
+.btn-actualizar {
+    background-color: white;
+    color: black; 
+}
+
+.btn-borrar {
+    background-color: #b81a1a;
+    color: black; 
+}
