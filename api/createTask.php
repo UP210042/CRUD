@@ -1,14 +1,14 @@
 <?php
 include "./partials/Connection.php";
 
-if(isset($_POST['users'], $_POST['title'], $_POST['completed'])) {
+if(isset($_POST['users'], $_POST['title'], $_POST['description'])) {
     $userId = $_POST['users'];
     $taskTitle = $_POST['title'];
-    $completed = $_POST['completed'];
+    $description = $_POST['description'];
     try {
-        $sql = "INSERT INTO task (title, idUser, completed) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO task (title, idUser, description) VALUES (?, ?, ?)";
         $state = $conn->prepare($sql);
-        $state->execute([$taskTitle, $userId, $completed]);
+        $state->execute([$taskTitle, $userId, $description]);
 
         echo json_encode(["success" => true]);
     } catch (PDOException $e) {

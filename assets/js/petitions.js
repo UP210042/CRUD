@@ -18,9 +18,3 @@ export async function createTask(formData) {
   const json = await res.json();
   return json;
 }
-
-export async function deleteTask(taskId) {
-  const res = await fetch(`/api/deleteTask.php?id=${taskId}`);
-  const json = await res.json();
-  return json;
-}

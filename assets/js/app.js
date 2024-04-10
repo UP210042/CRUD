@@ -1,10 +1,8 @@
-import { deleteTask, createTask, getAllUsers, getTasksByUserId } from "./petitions.js";
+import { getAllUsers, getTasksByUserId, createTask } from "./petitions.js";
 
 const listUsers = document.getElementById('users');
 const taskTable = document.getElementById('tasks');
-const taskForm = document.getElementById('form-task');
-const taskTitle = document.getElementById('form-title');
-const completedCheckbox = document.getElementById('completed');
+const taskForm = document.getElementById('form-task'); // Agregar la referencia al formulario
 
 document.addEventListener('DOMContentLoaded', async () => {
   const allUsers = await getAllUsers();
@@ -23,13 +21,12 @@ listUsers.addEventListener('change', async () => {
 
   let template = "";
   for (const task of userTasks) {
-    const taskCompleted = task.completed ? "Completada" : "No completada";
     template += `
       <tr id="tablerow${task.id}">
         <td>${task.id}</td>
         <td>${task.firstname}</td>
         <td>${task.title}</td>
-        <td>${taskCompleted}</td>
+        <td>${task.description}</td> <!-- Mostrar la descripción en esta celda -->
         <td>
           <button class="btn btn-info btn-sm updateBtn" id="updateBtn${task.id}">
             <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
@@ -41,36 +38,26 @@ listUsers.addEventListener('change', async () => {
       </tr>`;
   }
   taskTable.querySelector('tbody').innerHTML = template;
-
-  const deleteButtons = document.querySelectorAll('.deleteBtn');
-  deleteButtons.forEach(button => {
-    button.addEventListener('click', async () => {
-      const taskId = button.id.replace('deleteBtn', '');
-      const row = document.getElementById(`tablerow${taskId}`);
-      row.remove();
-      await deleteTask(taskId);
-    });
-  });
-
-  const updateButtons = document.querySelectorAll('.updateBtn');
-  updateButtons.forEach(button => {
-    button.addEventListener('click', async () => {
-      const taskId = button.id.replace('updateBtn', '');
-      taskTitle.innerText = "Actualizar tarea";
-    });
-  });
 });
 
-// Reemplaza el event listener submit actual por este código
 taskForm.addEventListener('submit', async (event) => {
   event.preventDefault(); 
+
+  const formData = new FormData(taskForm); 
+  const response = await createTask(formData);
+
+  console.log(response);
+});
+
+document.getElementById('form-task').addEventListener('submit', async (event) => {
+  event.preventDefault(); // Evita el envío predeterminado del formulario
   
-  const formData = new FormData(taskForm);
-  const completedValue = completedCheckbox.checked ? 1 : 0;
-  formData.append('completed', completedValue);
-
-  await createTask(formData);
-
-  // Limpiar el formulario después de guardar la tarea
-  taskForm.reset();
+  const formData = new FormData(event.target); // Obtén los datos del formulario
+  
+  try {
+    const response = await createTask(formData); // Llama a la función createTask con los datos del formulario
+    console.log(response); // Maneja la respuesta si es necesario
+  } catch (error) {
+    console.error(error); // Maneja el error si ocurre
+  }
 });

@@ -3,6 +3,7 @@ include "./partials/Connection.php";
 
 try {
   $SQL = "SELECT * FROM user;";
+
   $state = $conn->query($SQL);
 
   $json = [];
@@ -15,5 +16,5 @@ try {
 
   echo json_encode($json);
 } catch (PDOException $e) {
+  die($e->getMessage());
 }
-?>
