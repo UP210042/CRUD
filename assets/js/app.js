@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <td>${task.id}</td>
           <td>${task.firstname}</td>
           <td>${task.title}</td>
-          <td>${task.description}</td> <!-- Mostrar la descripción en esta celda -->
+          <td>${task.description}</td> 
           <td>
             <button class="btn btn-secondary btn-sm btn-actualizar">
               <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    // Agregar eventos de clic para los botones de borrar después de que se actualice el contenido de la tabla
+    
     const deleteButtons = document.querySelectorAll('.btn-borrar');
     deleteButtons.forEach(button => {
       button.addEventListener('click', async (event) => {
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           try {
             const deletedTask = await deleteTask(taskId);
             console.log(deletedTask);
-            // Actualizar la lista de tareas después de eliminar la tarea
+            
             const userTasks = await getTasksByUserId(listUsers.value);
             let template = "";
             for (const task of userTasks) {
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                   <td>${task.id}</td>
                   <td>${task.firstname}</td>
                   <td>${task.title}</td>
-                  <td>${task.description}</td> <!-- Mostrar la descripción en esta celda -->
+                  <td>${task.description}</td> 
                   <td>
                     <button class="btn btn-secondary btn-sm btn-actualizar">
                       <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
