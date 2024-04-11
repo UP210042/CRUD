@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!--
+Hubo muchos cambios en la base de datos:
+Nombre de db: todo_App
+en vez de la columna completed, la deje como description
+deje mis cambios de mi base de datos en la carpeta database
+-->
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -50,7 +55,7 @@
               <th>ID</th>
               <th>Usuario</th>
               <th>Título</th>
-              <th>Descripcion</th>
+              <th>Descripcion</th> 
               <th>Acción</th>
             </tr>
           </thead>
@@ -61,14 +66,13 @@
               <td>Some Title</td>
               <td>Lorem ipsum dolor .</td>
               <td>
-                <button class="btn btn-secondary btn-sm btn-actualizar">
+                <button class="btn btn-secondary btn-sm btn-actualizar" data-task-id="${task.id}">
                   <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
                 </button>
-                <button class="btn btn-danger btn-sm btn-borrar">
+                <button class="btn btn-danger btn-sm btn-borrar" data-task-id="${task.id}">
                   <span>Borrar</span> <i class="nf nf-cod-trash"></i>
                 </button>
-
-              </td>
+              </td>              
             </tr>
             <tr>
               <td>1</td>
@@ -76,13 +80,13 @@
               <td>Some Title</td>
               <td>Lorem ipsum dolor .</td>
               <td>
-                <button class="btn btn-secondary btn-sm btn-actualizar">
+                <button class="btn btn-secondary btn-sm btn-actualizar" data-task-id="${task.id}">
                   <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
                 </button>
-                <button class="btn btn-danger btn-sm btn-borrar">
+                <button class="btn btn-danger btn-sm btn-borrar" data-task-id="${task.id}">
                   <span>Borrar</span> <i class="nf nf-cod-trash"></i>
                 </button>
-              </td>
+              </td>              
             </tr>
           </tbody>
         </table>

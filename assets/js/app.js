@@ -1,4 +1,4 @@
-import { getAllUsers, getTasksByUserId, createTask, updateTask } from "./petitions.js";
+import { getAllUsers, getTasksByUserId, createTask, updateTask, deleteTask } from "./petitions.js";
 
 const listUsers = document.getElementById('users');
 const taskTable = document.getElementById('tasks');
@@ -14,37 +14,86 @@ document.addEventListener('DOMContentLoaded', async () => {
     `;
   }
   listUsers.innerHTML = template;
-});
 
-listUsers.addEventListener('change', async () => {
-  const userTasks = await getTasksByUserId(listUsers.value);
+  listUsers.addEventListener('change', async () => {
+    const userTasks = await getTasksByUserId(listUsers.value);
 
-  let template = "";
-  for (const task of userTasks) {
-    template += `
-      <tr id="tablerow${task.id}">
-        <td>${task.id}</td>
-        <td>${task.firstname}</td>
-        <td>${task.title}</td>
-        <td>${task.description}</td> <!-- Mostrar la descripción en esta celda -->
-        <td>
-          <button class="btn btn-secondary btn-sm btn-actualizar">
-            <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
-          </button>
-          <button class="btn btn-danger btn-sm btn-borrar">
-            <span>Borrar</span> <i class="nf nf-cod-trash"></i>
-          </button>
-        </td>
-      </tr>`;
-  }
-  taskTable.querySelector('tbody').innerHTML = template;
-});
+    let template = "";
+    for (const task of userTasks) {
+      template += `
+        <tr id="tablerow${task.id}">
+          <td>${task.id}</td>
+          <td>${task.firstname}</td>
+          <td>${task.title}</td>
+          <td>${task.description}</td> <!-- Mostrar la descripción en esta celda -->
+          <td>
+            <button class="btn btn-secondary btn-sm btn-actualizar">
+              <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
+            </button>
+            <button class="btn btn-danger btn-sm btn-borrar">
+              <span>Borrar</span> <i class="nf nf-cod-trash"></i>
+            </button>
+          </td>
+        </tr>`;
+    }
+    taskTable.querySelector('tbody').innerHTML = template;
 
-taskForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
+    const updateButtons = document.querySelectorAll('.btn-actualizar');
+    updateButtons.forEach(button => {
+      button.addEventListener('click', async (event) => {
+        const taskId = event.target.parentElement.parentElement.id.replace('tablerow', '');
+        const newTitle = prompt("Ingrese el nuevo título:");
+        const newDescription = prompt("Ingrese la nueva descripción:");
+        const updatedTask = await updateTask(taskId, newTitle, newDescription); 
+        console.log(updatedTask);
+      });
+    });
 
-  const formData = new FormData(taskForm); 
-  const response = await createTask(formData);
+    // Agregar eventos de clic para los botones de borrar después de que se actualice el contenido de la tabla
+    const deleteButtons = document.querySelectorAll('.btn-borrar');
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', async (event) => {
+        const taskId = event.target.parentElement.parentElement.id.replace('tablerow', '');
+        const confirmation = confirm("¿Estás seguro de que deseas eliminar esta tarea?");
+        if (confirmation) {
+          try {
+            const deletedTask = await deleteTask(taskId);
+            console.log(deletedTask);
+            // Actualizar la lista de tareas después de eliminar la tarea
+            const userTasks = await getTasksByUserId(listUsers.value);
+            let template = "";
+            for (const task of userTasks) {
+              template += `
+                <tr id="tablerow${task.id}">
+                  <td>${task.id}</td>
+                  <td>${task.firstname}</td>
+                  <td>${task.title}</td>
+                  <td>${task.description}</td> <!-- Mostrar la descripción en esta celda -->
+                  <td>
+                    <button class="btn btn-secondary btn-sm btn-actualizar">
+                      <span>Actualizar</span> <i class="nf nf-md-pencil"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-borrar">
+                      <span>Borrar</span> <i class="nf nf-cod-trash"></i>
+                    </button>
+                  </td>
+                </tr>`;
+            }
+            taskTable.querySelector('tbody').innerHTML = template;
+          } catch (error) {
+            console.error("Error al eliminar tarea:", error);
+          }
+        }
+      });
+    });
+  });
 
-  console.log(response);
+  taskForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(taskForm); 
+    const response = await createTask(formData);
+
+    console.log(response);
+  });
 });
